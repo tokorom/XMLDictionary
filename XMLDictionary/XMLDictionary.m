@@ -49,7 +49,7 @@
 @property (nonatomic, strong) NSMutableDictionary *root;
 @property (nonatomic, strong) NSMutableArray *stack;
 @property (nonatomic, strong) NSMutableString *text;
-@property (assign) NSUInteger arrayIndex;
+@property (assign) NSUInteger parsedIndex;
 
 @end
 
@@ -262,27 +262,22 @@
             _root = [NSMutableDictionary dictionaryWithObject:_root forKey:elementName];
             [_stack insertObject:_root atIndex:0];
         }
+        self.parsedIndex = 0;
 	}
 	else
 	{
+        if ([node isKindOfClass:[NSDictionary class]]) {
+            node[XMLDictionaryIndexKey] = @(self.parsedIndex++);
+        }
+
         NSMutableDictionary *top = [_stack lastObject];
 		id existing = top[elementName];
         if ([existing isKindOfClass:[NSArray class]])
         {
-            if ([node isKindOfClass:[NSDictionary class]]) {
-                node[XMLDictionaryArrayIndexKey] = @(self.arrayIndex++);
-            }
             [existing addObject:node];
         }
         else if (existing)
         {
-            self.arrayIndex = 0;
-            if ([existing isKindOfClass:[NSDictionary class]]) {
-                existing[XMLDictionaryArrayIndexKey] = @(self.arrayIndex++);
-            }
-            if ([node isKindOfClass:[NSDictionary class]]) {
-                node[XMLDictionaryArrayIndexKey] = @(self.arrayIndex++);
-            }
             top[elementName] = [@[existing, node] mutableCopy];
         }
         else if (_alwaysUseArrays)
@@ -466,9 +461,9 @@
 	return self[XMLDictionaryNodeNameKey];
 }
 
-- (NSUInteger)arrayIndex
+- (NSUInteger)parsedIndex
 {
-	return [self[XMLDictionaryNodeNameKey] unsignedIntegerValue];
+	return [self[XMLDictionaryIndexKey] unsignedIntegerValue];
 }
 
 - (id)innerText
