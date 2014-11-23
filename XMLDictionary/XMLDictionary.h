@@ -55,8 +55,8 @@ static NSString *const XMLDictionaryAttributesKey   = @"__attributes";
 static NSString *const XMLDictionaryCommentsKey     = @"__comments";
 static NSString *const XMLDictionaryTextKey         = @"__text";
 static NSString *const XMLDictionaryNodeNameKey     = @"__name";
+static NSString *const XMLDictionaryArrayIndexKey   = @"_arrayIndex";
 static NSString *const XMLDictionaryAttributePrefix = @"_";
-
 
 @interface XMLDictionaryParser : NSObject <NSCopying>
 
@@ -91,6 +91,7 @@ static NSString *const XMLDictionaryAttributePrefix = @"_";
 - (NSDictionary *)childNodes;
 - (NSArray *)comments;
 - (NSString *)nodeName;
+- (NSUInteger)arrayIndex;
 - (NSString *)innerText;
 - (NSString *)innerXML;
 - (NSString *)XMLString;
