@@ -182,6 +182,7 @@
 		{
 			top[XMLDictionaryTextKey] = _text;
 		}
+        [top removeObjectForKey:XMLDictionaryIndexKey];
 	}
 	_text = nil;
 }
