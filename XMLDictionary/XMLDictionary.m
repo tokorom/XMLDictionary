@@ -182,7 +182,6 @@
 		{
 			top[XMLDictionaryTextKey] = _text;
 		}
-        [top removeObjectForKey:XMLDictionaryIndexKey];
 	}
 	_text = nil;
 }
@@ -267,18 +266,19 @@
 	}
 	else
 	{
-        if ([node isKindOfClass:[NSDictionary class]]) {
-            node[XMLDictionaryIndexKey] = @(self.parsedIndex++);
-        }
-
         NSMutableDictionary *top = [_stack lastObject];
 		id existing = top[elementName];
         if ([existing isKindOfClass:[NSArray class]])
         {
+            node[XMLDictionaryIndexKey] = @(self.parsedIndex++);
+
             [existing addObject:node];
         }
         else if (existing)
         {
+            existing[XMLDictionaryIndexKey] = @(self.parsedIndex++);
+            node[XMLDictionaryIndexKey] = @(self.parsedIndex++);
+
             top[elementName] = [@[existing, node] mutableCopy];
         }
         else if (_alwaysUseArrays)
